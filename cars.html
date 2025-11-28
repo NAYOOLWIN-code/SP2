@@ -1,55 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CARS | JDM Legends Garage</title>
-  <link rel="stylesheet" href="css/cars.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CARS | JDM Legends Garage</title>
+    <link rel="stylesheet" href="css/cars.css" />
 </head>
+
 <body>
-  <header>
-    <nav class="navbar">
-      <ul>
-        <li><a href="index.html">HOME</a></li>
-        <li><a href="cars.html">CARS</a></li>
-        <li><a href="history.html">HISTORY</a></li>
-        <li><a href="gallery.html">GALLERY</a></li>
-        <li><a href="contact.html">CONTACT</a></li>
-      </ul>
-    </nav>
-  </header>
+    <header>
+        <nav class="navbar">
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="cars.html">CARS</a></li>
+                <li><a href="history.html">HISTORY</a></li>
+                <li><a href="gallery.html">GALLERY</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <main class="car-showcase">
-    <h1>Explore the Legends</h1>
-    <div class="car-grid">
-      <div class="car-card">
-        <img src="images/nsx.jpg" alt="Acura NSX" />
-        <h2>Acura NSX</h2>
-        <p>Widebody Garage build with track-ready stance.</p>
-        <a href="#" class="info-button">More Info</a>
-      </div>
+    <main class="car-showcase">
+        <h1>Explore the Legends</h1>
+        <div class="car-grid">
+            <!-- Car 1 -->
+            <div class="car-card">
+                <img src="https://i.pinimg.com/1200x/03/2f/43/032f43536ba887f3cc0a9b03ef5e44c2.jpg" alt="Acura NSX" />
+                <h2>Acura NSX</h2>
+                <p>Widebody Garage build with track-ready stance.</p>
+                <a href="#" class="info-button">More Info</a>
+            </div>
 
-      <div class="car-card">
-        <img src="images/rx7.jpg" alt="Mazda RX-7" />
-        <h2>Mazda RX-7</h2>
-        <p>Rotary-powered icon with timeless curves.</p>
-        <a href="#" class="info-button">More Info</a>
-      </div>
+            <!-- Car 2 -->
+            <div class="car-card">
+                <img src="https://i.pinimg.com/1200x/36/6f/90/366f90bc5b27b0017a3e3d262e87c80d.jpg" alt="Mazda RX-7" />
+                <h2>Mazda RX-7</h2>
+                <p>Rotary-powered icon with timeless curves.</p>
+                <a href="#" class="info-button">More Info</a>
+            </div>
 
-      <div class="car-card">
-        <img src="images/supra.jpg" alt="Toyota Supra MK4" />
-        <h2>Supra MK4</h2>
-        <p>Turbocharged legend built for the streets.</p>
-        <a href="#" class="info-button">More Info</a>
-      </div>
+            <!-- Car 3 -->
+            <div class="car-card">
+                <img src="https://i.pinimg.com/1200x/9e/56/4b/9e564b3ce258bde3fa560a3cc06ad779.jpg" alt="Toyota Supra MK4" />
+                <h2>Supra MK4</h2>
+                <p>Turbocharged legend built for the streets.</p>
+                <a href="#" class="info-button">More Info</a>
+            </div>
 
-      <div class="car-card">
-        <img src="images/gtr.jpg" alt="Nissan GT-R R34" />
-        <h2>GT-R R34</h2>
-        <p>Godzilla in its purest form — AWD grip and JDM soul.</p>
-        <a href="#" class="info-button">More Info</a>
-      </div>
-    </div>
-  </main>
+            <!-- Car 4 -->
+            <div class="car-card">
+                <img src="https://i.pinimg.com/1200x/55/b9/66/55b9667e83199e78129ced0b4f0e1157.jpg" alt="Nissan GT-R R34" />
+                <h2>GT-R R34</h2>
+                <p>Godzilla in its purest form — AWD grip and JDM soul.</p>
+                <a href="#" class="info-button">More Info</a>
+            </div>
+
+            <!-- Car 5 -->
+            <div class="car-card">
+                <img src="https://i.pinimg.com/736x/10/bc/83/10bc83ea811b08834e30c19e9a4e8021.jpg" alt="Lancer Evolution VI" />
+                <h2>Lancer Evo VI</h2>
+                <p>Rally-bred AWD beast with aggressive aero.</p>
+                <a href="#" class="info-button">More Info</a>
+            </div>
+
+            <!-- Car 6 -->
+            <div class="car-card">
+                <img src="https://i.pinimg.com/1200x/62/15/f4/6215f45c563606616613a4c7befc469e.jpg" alt="Nissan 240SX" />
+                <h2>Nissan 240SX</h2>
+                <p>Drift icon with endless tuning potential.</p>
+                <a href="#" class="info-button">More Info</a>
+            </div>
+
+            <!-- Car 7 -->
+            <div class="car-card">
+                <img src="https://i.pinimg.com/1200x/91/89/93/918993861619abadd7ddc0e329846528.jpg" alt="Fairlady Z" />
+                <h2>Fairlady Z</h2>
+                <p>Retro-modern fusion of speed and style.</p>
+                <a href="#" class="info-button">More Info</a>
+            </div>
+
+            <!-- More Cars Button -->
+            <div class="car-card more-button-card">
+                <button id="moreCarsBtn">More Cars</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        const showMoreBtn = document.getElementById('showMoreBtn');
+        const extraCars = document.querySelector('.extra-cars');
+
+        showMoreBtn.addEventListener('click', () => {
+            extraCars.style.display = 'grid';
+            showMoreBtn.style.display = 'none';
+        });
+    </script>
 </body>
+
 </html>

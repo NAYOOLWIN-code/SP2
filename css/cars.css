@@ -72,3 +72,22 @@ body {
 .info-button:hover {
   background-color: #e63b3b;
 }
+.more-button-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#moreCarsBtn {
+  padding: 0.75rem 1.5rem;
+  background-color: #ff4c4c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+#moreCarsBtn:hover {
+  background-color: #e63b3b;
+}
