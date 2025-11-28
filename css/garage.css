@@ -5,6 +5,29 @@ body {
   color: #fff;
 }
 
+.navbar {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.navbar a:hover {
+  color: #ff4c4c;
+}
+
 header {
   text-align: center;
   padding: 2rem 1rem;
