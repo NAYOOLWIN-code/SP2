@@ -1,189 +1,431 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JDM Legends Garage</title>
-    <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Campus Planner</title>
+  <meta name="description" content="大学生活専用のスケジュールアプリ。授業・課題・バイト・サークルの予定をひとつの画面で管理。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1216;
+      --card: #151a21;
+      --text: #e9eef7;
+      --muted: #b9c2d0;
+      --primary: #4f7cff;
+      --accent: #00c2a8;
+      --danger: #ff6b6b;
+      --ok: #3ad29f;
+      --border: #243042;
+      --shadow: 0 10px 25px rgba(0,0,0,0.35);
+      --radius: 14px;
+      --radius-sm: 10px;
+      --radius-lg: 20px;
+      --maxw: 1100px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans JP", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 80% -10%, rgba(79,124,255,0.18), transparent 60%) var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    a { color: var(--primary); text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .wrap { width: 92%; max-width: var(--maxw); margin: 0 auto; }
+
+    /* Header */
+    header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(15,18,22,0.75);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .5px; }
+    .logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 20px var(--accent); }
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a { color: var(--muted); font-weight: 600; }
+    .cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, var(--primary), #7aa2ff);
+      color: white; padding: 10px 16px; border-radius: 999px;
+      font-weight: 700; box-shadow: var(--shadow);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 80px 0 30px;
+      display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px;
+    }
+    .hero h1 { font-size: clamp(28px, 4.8vw, 44px); line-height: 1.2; margin: 0 0 16px; }
+    .hero p { color: var(--muted); margin: 0 0 24px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--card); color: var(--text);
+      padding: 10px 16px; border-radius: 999px; border: 1px solid var(--border);
+      font-weight: 700;
+    }
+    .btn-primary { background: var(--primary); color: white; border: none; }
+    .badge { background: #1e2430; color: var(--accent); padding: 6px 10px; border-radius: 999px; border: 1px dashed #2f3a4d; font-size: 12px; }
+
+    .phone-card {
+      background: linear-gradient(180deg, #141923, #0f141d);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .phone-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #304057; }
+    .phone-title { font-weight: 700; color: var(--muted); }
+
+    .schedule {
+      display: grid; gap: 10px;
+    }
+    .slot {
+      background: #162031; border: 1px solid #223047; border-left: 6px solid var(--primary);
+      border-radius: var(--radius-sm); padding: 12px;
+    }
+    .slot.deadline { border-left-color: var(--danger); }
+    .slot.club { border-left-color: var(--accent); }
+    .slot h4 { margin: 0 0 6px; font-size: 16px; }
+    .slot .time { color: var(--muted); font-size: 13px; }
+
+    /* Problem section */
+    section { padding: 60px 0; }
+    .section-title { font-size: 24px; font-weight: 700; margin-bottom: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px;
+    }
+    .card h3 { margin: 0 0 8px; font-size: 18px; }
+    .card p { margin: 0; color: var(--muted); }
+
+    /* Features */
+    .feature {
+      background: linear-gradient(180deg, #141a22, #11161d);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+    .feature h4 { margin: 0 0 6px; font-size: 18px; }
+    .feature p { margin: 0; color: var(--muted); }
+
+    /* Steps */
+    .step { display: flex; gap: 14px; align-items: flex-start; }
+    .step-num {
+      flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%;
+      display: grid; place-items: center; font-weight: 700; color: white;
+      background: var(--primary); box-shadow: var(--shadow);
+    }
+
+    /* Pricing */
+    .table {
+      width: 100%; border-collapse: collapse; overflow: hidden;
+      border: 1px solid var(--border); border-radius: var(--radius);
+    }
+    .table caption { text-align: left; font-weight: 700; margin-bottom: 10px; }
+    .table th, .table td { border-bottom: 1px solid var(--border); padding: 12px 14px; text-align: left; }
+    .table tr:last-child td { border-bottom: none; }
+    .highlight { border: 2px solid var(--accent); border-radius: var(--radius); }
+
+    /* FAQ */
+    .faq-item {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px; margin-bottom: 12px;
+    }
+    .faq-q { font-weight: 700; margin-bottom: 8px; }
+    .faq-a { color: var(--muted); }
+
+    /* Contact */
+    .form {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px;
+    }
+    .form-row { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; margin-bottom: 12px; }
+    .form-row.single { grid-template-columns: 1fr; }
+    label { font-weight: 600; font-size: 14px; color: var(--muted); }
+    input, select, textarea {
+      width: 100%; padding: 10px 12px; border-radius: 10px;
+      background: #121823; color: var(--text); border: 1px solid var(--border);
+      font: inherit;
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    .send {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent); color: #041215; font-weight: 800;
+      padding: 12px 16px; border-radius: 999px; border: none;
+    }
+    .note { color: var(--muted); font-size: 13px; margin-top: 8px; }
+
+    /* Footer */
+    footer { padding: 40px 0; color: var(--muted); border-top: 1px solid var(--border); }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .grid-3 { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <ul>
-            <li><a href="#home">HOME</a></li>
-            <li><a href="#cars">CARS</a></li>
-            <li><a href="#history">HISTORY</a></li>
-            <li><a href="#gallery">GALLERY</a></li>
-            <li><a href="#garage">GARAGE</a></li>
-        </ul>
-    </nav>
+  <header>
+    <div class="wrap nav">
+      <div class="logo"><span class="logo-dot"></span>Campus Planner</div>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#features">特徵</a>
+        <a href="#steps">使い方・プラン</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">お問い合わせ</a>
+      </nav>
+      <a class="cta" href="#pricing">無料で試してみる</a>
+    </div>
+  </header>
 
-    <!-- Home Section -->
-    <section id="home">
-        <div class="hero">
-            <div class="hero-text">
-                <h1>JDM LEGENDS GARAGE</h1>
-                <p>Built by JDM Enthusiasts for JDM Enthusiasts</p>
-                <a href="#garage" class="enter-button">Enter Garage</a>
-            </div>
+  <main>
+    <!-- Hero -->
+    <section class="hero wrap" id="home">
+      <div>
+        <div class="badge">Campus Planner</div>
+        <h1>大学生活の予定管理を、もっとシンプルに。</h1>
+        <p>Campus Planner は、授業・課題・バイト・サークル ……… ばらばらな予定をひとつの画面で管理できる、大学生活専用のスケジュールアプリです。</p>
+        <div class="hero-actions">
+          <a class="btn-primary btn" href="#pricing">無料で試してみる</a>
+          <a class="btn" href="#features">特徵を見る</a>
         </div>
+      </div>
+      <aside class="phone-card" aria-label="今日の予定例">
+        <div class="phone-header">
+          <div style="display:flex; gap:6px;">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+          <div class="phone-title">今日の予定</div>
+        </div>
+        <div class="schedule">
+          <div class="slot">
+            <h4>経済学の講義</h4>
+            <div class="time">9:00 - 10:30</div>
+          </div>
+          <div class="slot deadline">
+            <h4>レポート提出</h4>
+            <div class="time">17:00 締切</div>
+          </div>
+          <div class="slot club">
+            <h4>サークル活動</h4>
+            <div class="time">18:00 - 20:00</div>
+          </div>
+        </div>
+      </aside>
     </section>
 
-    <!-- Cars Section -->
-    <section id="cars">
-        <h1>Explore the Legends</h1>
-        <p class="subtitle">Iconic JDM machines that defined a generation</p>
-        <div class="car-grid">
-            <div class="car-card">
-                <img src="https://i.pinimg.com/1200x/03/2f/43/032f43536ba887f3cc0a9b03ef5e44c2.jpg" alt="Acura NSX">
-                <h2>Acura NSX</h2>
-                <p>Widebody Garage build with track-ready stance.</p>
-                <a href="#" class="info-button">More Info</a>
-            </div>
-            <div class="car-card">
-                <img src="https://i.pinimg.com/1200x/36/6f/90/366f90bc5b27b0017a3e3d262e87c80d.jpg" alt="Mazda RX-7">
-                <h2>Mazda RX-7</h2>
-                <p>Rotary-powered icon with timeless curves.</p>
-                <a href="#" class="info-button">More Info</a>
-            </div>
-            <div class="car-card">
-                <img src="https://i.pinimg.com/1200x/9e/56/4b/9e564b3ce258bde3fa560a3cc06ad779.jpg" alt="Toyota Supra MK4">
-                <h2>Supra MK4</h2>
-                <p>Turbocharged legend built for the streets.</p>
-                <a href="#" class="info-button">More Info</a>
-            </div>
-            <div class="car-card">
-                <img src="https://i.pinimg.com/1200x/55/b9/66/55b9667e83199e78129ced0b4f0e1157.jpg" alt="Nissan GT-R R34">
-                <h2>GT-R R34</h2>
-                <p>Godzilla in its purest form — AWD grip and JDM soul.</p>
-                <a href="#" class="info-button">More Info</a>
-            </div>
-            <div class="car-card">
-                <img src="https://i.pinimg.com/736x/10/bc/83/10bc83ea811b08834e30c19e9a4e8021.jpg" alt="Lancer Evolution VI">
-                <h2>Lancer Evo VI</h2>
-                <p>Rally-bred AWD beast with aggressive aero.</p>
-                <a href="#" class="info-button">More Info</a>
-            </div>
-            <div class="car-card">
-                <img src="https://i.pinimg.com/1200x/62/15/f4/6215f45c563606616613a4c7befc469e.jpg" alt="Nissan 240SX">
-                <h2>Nissan 240SX</h2>
-                <p>Drift icon with endless tuning potential.</p>
-                <a href="#" class="info-button">More Info</a>
-            </div>
-            <div class="car-card">
-                <img src="https://i.pinimg.com/1200x/91/89/93/918993861619abadd7ddc0e329846528.jpg" alt="Fairlady Z">
-                <h2>Fairlady Z</h2>
-                <p>Retro-modern fusion of speed and style.</p>
-                <a href="#" class="info-button">More Info</a>
-            </div>
+    <!-- Problems -->
+    <section id="problems">
+      <div class="wrap">
+        <h2 class="section-title">大学生活、こんな悩みはありませんか?</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h3>授業・課題の締め切りをつい忘れてしまう</h3>
+            <p>締切と時間割を同時表示して、抜け漏れを防止。</p>
+          </div>
+          <div class="card">
+            <h3>サークルとバイトの予定がかぶってしまう</h3>
+            <p>学業とプライベートを色分け。重複を一目で検知。</p>
+          </div>
+          <div class="card">
+            <h3>グループ課題の進捗が把握しづらい</h3>
+            <p>タスク共有で進捗を確認。みんなで同じ画面を共有。</p>
+          </div>
         </div>
+      </div>
     </section>
 
-    <!-- History Section -->
-    <section id="history">
-        <h1>History of JDM Legends</h1>
-        <p class="subtitle">From humble beginnings to global icons</p>
-        <div class="timeline">
-            <div class="timeline-item">
-                <h2>1960s - The Dawn</h2>
-                <img src="https://i.pinimg.com/736x/31/ec/59/31ec5959914d4e50193e611ceb40164a.jpg" alt="Toyota 2000GT" class="timeline-img">
-                <p>Japan's automotive industry rises, with models like the Toyota 2000GT showcasing engineering excellence.</p>
-            </div>
-            <div class="timeline-item">
-                <h2>1980s - Performance Era</h2>
-                <img src="https://i.pinimg.com/736x/ea/1d/58/ea1d586f4fb98621ef74b7d62d928add.jpg" alt="Toyota AE86" class="timeline-img">
-                <p>The Toyota AE86 became a symbol of lightweight, rear-wheel-drive performance. Its role in motorsports and pop culture — especially drifting and Initial D — helped define JDM car culture for a generation.</p>
-            </div>
-            <div class="timeline-item">
-                <h2>1990s - Golden Age</h2>
-                <div class="timeline-gallery">
-                    <img src="https://i.pinimg.com/1200x/ec/f9/df/ecf9df26a937f7b6ba5597e28589df79.jpg" alt="Mazda RX-7 FD">
-                    <img src="https://i.pinimg.com/1200x/d9/78/7d/d9787d29233f0e0a4022051c8f94faf9.jpg" alt="Toyota Supra MK4">
-                    <img src="https://i.pinimg.com/1200x/92/31/3e/92313ebf3cdc93681b227e8eb25894e9.jpg" alt="Nissan GT-R R34">
-                </div>
-                <p>Icons like the Supra MK4, RX-7 FD, and GT-R R34 dominate both street and track scenes.</p>
-            </div>
-            <div class="timeline-item">
-                <h2>2000s - Tuning Culture</h2>
-                <div class="timeline-gallery">
-                    <img src="https://i.pinimg.com/1200x/56/6f/bf/566fbf0aaa11c92fdd1fa0041cbaa7cf.jpg" alt="Honda S2000">
-                    <img src="https://i.pinimg.com/736x/b1/a5/e1/b1a5e1023be24e0e857e32e38deed434.jpg" alt="Subaru Impreza WRX STI">
-                </div>
-                <p>Street racing and drift culture explode, with JDM cars becoming symbols of customization and individuality.</p>
-            </div>
-            <div class="timeline-item">
-                <h2>2010s-2020s - Global Revival</h2>
-                <div class="timeline-gallery">
-                    <img src="https://i.pinimg.com/736x/a7/5a/7f/a75a7fd73e5bd917bdd5ac461f88bc77.jpg" alt="Toyota Supra A90">
-                    <img src="https://i.pinimg.com/736x/c9/d0/26/c9d02638aac4f13aa630db43ea9b5422.jpg" alt="Nissan GT-R R35">
-                </div>
-                <p>Classic JDM cars gain collector status, while modern models like the new Supra and GT-R continue the legacy.</p>
-            </div>
+    <!-- Features -->
+    <section id="features">
+      <div class="wrap">
+        <h2 class="section-title">Campus Planner の3つの特徵</h2>
+        <div class="grid-3">
+          <div class="feature">
+            <h4>時間割と課題をまとめて管理</h4>
+            <p>時間割と課題の締め切りをひとつの画面に表示。</p>
+          </div>
+          <div class="feature">
+            <h4>バイト・サークルも一括スケジュール</h4>
+            <p>学業とプライベートの予定を色分けして見やすく。</p>
+          </div>
+          <div class="feature">
+            <h4>グループ共有で抜け漏れ防止</h4>
+            <p>グループ課題のタスクを共有し、進捗を確認。</p>
+          </div>
         </div>
+      </div>
     </section>
 
-    <!-- Gallery Section -->
-    <section id="gallery">
-        <h1>JDM Legends Gallery</h1>
-        <p class="subtitle">Explore iconic builds and timeless street scenes</p>
-        <div class="gallery-grid">
-            <div class="gallery-item">
-                <img src="https://i.pinimg.com/1200x/ec/f9/df/ecf9df26a937f7b6ba5597e28589df79.jpg" alt="Cars lined up at night">
-                <p class="caption">Osaka Night Meet — RX-7, Silvia, Skyline</p>
+    <!-- Steps -->
+    <section id="steps">
+      <div class="wrap">
+        <h2 class="section-title">3ステップでかんたんスタート</h2>
+        <div class="grid-3">
+          <div class="card step">
+            <div class="step-num">1</div>
+            <div>
+              <h4>アカウント登録</h4>
+              <p>メールアドレスだけでOK。</p>
             </div>
-            <div class="gallery-item">
-                <img src="https://i.pinimg.com/1200x/36/6f/90/366f90bc5b27b0017a3e3d262e87c80d.jpg" alt="Car drifting">
-                <p class="caption">Track Day — S13 sliding through the corner</p>
+          </div>
+          <div class="card step">
+            <div class="step-num">2</div>
+            <div>
+              <h4>時間割・課題・予定を登録</h4>
+              <p>簡単な入力で予定を追加。</p>
             </div>
-            <div class="gallery-item">
-                <img src="https://i.pinimg.com/1200x/9e/56/4b/9e564b3ce258bde3fa560a3cc06ad779.jpg" alt="VIP sedan">
-                <p class="caption">VIP Style — Toyota Crown with neon underglow</p>
+          </div>
+          <div class="card step">
+            <div class="step-num">3</div>
+            <div>
+              <h4>スマホでもPCでも確認</h4>
+              <p>いつでもどこでもアクセス。</p>
             </div>
+          </div>
         </div>
+      </div>
     </section>
 
-    <!-- Garage Section -->
-    <section id="garage">
-        <div class="garage-header">
-            <h1 class="title">Modified Legends Showcase</h1>
-            <p class="subtitle">A tribute to Japan's most legendary builds – where street style meets engineering precision.</p>
+    <!-- Pricing -->
+    <section id="pricing">
+      <div class="wrap">
+        <h2 class="section-title">シンプルな料金プラン</h2>
+        <table class="table" aria-describedby="pricing">
+          <caption>プラン比較</caption>
+          <thead>
+            <tr>
+              <th>プラン</th>
+              <th>月額料金</th>
+              <th>登録できる予定数</th>
+              <th>共有できる人数</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>FREE</td>
+              <td>¥0</td>
+              <td>予定100件まで</td>
+              <td>共有なし</td>
+            </tr>
+            <tr>
+              <td>STUDENT</td>
+              <td>¥300</td>
+              <td>無制限</td>
+              <td>共有3人まで</td>
+            </tr>
+            <tr>
+              <td>TEAM</td>
+              <td>¥800</td>
+              <td>無制限</td>
+              <td>共有10人まで</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div style="height:16px"></div>
+
+        <div class="grid-3">
+          <div class="card highlight">
+            <h3>FREE 人気</h3>
+            <p><strong>¥0</strong> — 予定100件まで / 共有なし</p>
+          </div>
+          <div class="card">
+            <h3>STUDENT</h3>
+            <p><strong>¥300</strong> — 無制限 / 共有3人まで</p>
+          </div>
+          <div class="card">
+            <h3>TEAM</h3>
+            <p><strong>¥800</strong> — 無制限 / 共有10人まで</p>
+          </div>
         </div>
-        <div class="car-grid">
-            <div class="car-card">
-                <img src="https://i.pinimg.com/1200x/d7/00/36/d70036c5288b5b1a4c5e535a1e9632af.jpg" alt="Acura NSX">
-                <h2>Acura NSX</h2>
-                <p>Widebody Garage build</p>
-                <a href="#" class="info-button">More Info</a>
-            </div>
-            <div class="car-card">
-                <img src="https://i.pinimg.com/1200x/0f/6a/ea/0f6aea6b925be2087bf5f1799f71acd2.jpg" alt="Mazda RX-7">
-                <h2>Mazda RX-7</h2>
-                <p>Classic rotary legend</p>
-                <a href="#" class="info-button">More Info</a>
-            </div>
-            <div class="car-card">
-                <img src="https://i.pinimg.com/736x/c5/72/0e/c5720eb68e608dea4cb38f2c871ced71.jpg" alt="Toyota Supra MK4">
-                <h2>Supra MK4</h2>
-                <p>Iconic street build</p>
-                <a href="#" class="info-button">More Info</a>
-            </div>
-            <div class="car-card">
-                <img src="https://i.pinimg.com/736x/6e/6b/ed/6e6beda054f1cb1eaf4f331f12a6c142.jpg" alt="Nissan GT-R R34">
-                <h2>GT-R R34</h2>
-                <p>Autumn touge setup</p>
-                <a href="#" class="info-button">More Info</a>
-            </div>
-        </div>
+      </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="site-footer">
-        <p>&copy; 2025 JDM Legends Garage. All rights reserved.</p>
-        <div class="footer-links">
-            <a href="#">Privacy Policy</a> | 
-            <a href="#">Instagram</a> | 
-            <a href="#">YouTube</a>
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="wrap">
+        <h2 class="section-title">よくあるご質問</h2>
+
+        <div class="faq-item">
+          <div class="faq-q">Q. 本当に無料で使えますか?</div>
+          <div class="faq-a">はい。FREEプランは¥0でご利用いただけます。</div>
         </div>
-    </footer>
+
+        <div class="faq-item">
+          <div class="faq-q">Q. スマホだけでも使えますか?</div>
+          <div class="faq-a">はい。スマホでもPCでもアクセス可能です。</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Q. 大学のメールアドレスがなくても登録できますか?</div>
+          <div class="faq-a">はい。一般のメールアドレスで登録可能です。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <div class="wrap">
+        <h2 class="section-title">お問い合わせ</h2>
+        <p>ご質問やご要望がございましたら、お気軽にお問い合わせください。</p>
+
+        <form class="form" onsubmit="demoSubmit(event)" aria-label="お問い合わせフォーム">
+          <div class="form-row">
+            <div>
+              <label for="type">お問い合わせ種別</label>
+              <select id="type" name="type" required>
+                <option value="不具合">不具合</option>
+                <option value="ご要望">ご要望</option>
+                <option value="質問">質問</option>
+              </select>
+            </div>
+            <div>
+              <label for="email">メールアドレス</label>
+              <input id="email" name="email" type="email" placeholder="example@university.ac.jp" required />
+            </div>
+          </div>
+          <div class="form-row single">
+            <div>
+              <label for="message">お問い合わせ内容</label>
+              <textarea id="message" name="message" placeholder="お問い合わせ内容をご記入ください" required></textarea>
+            </div>
+          </div>
+          <button class="send" type="submit">送信する</button>
+          <div class="note">※このフォームはデモ用です。実際の送信は行われません。</div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div>@ 2025 Campus Planner</div>
+      <div class="note">このページは大学の授業課題として作成されたデモサイトです。</div>
+    </div>
+  </footer>
+
+  <script>
+    function demoSubmit(e) {
+      e.preventDefault();
+      alert("デモ送信：このフォームはデモ用です。実際の送信は行われません。");
+    }
+  </script>
 </body>
 </html>
